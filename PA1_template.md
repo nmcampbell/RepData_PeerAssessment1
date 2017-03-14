@@ -1,14 +1,10 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 This assignment answers questions using data from a personal activity monitoring device.  Code for analyzing data and generating plots is included.
 
 First load needed libraries:
-```{r}
+
+```r
 # Load ggplot2
 library(ggplot2)
 ```
@@ -20,14 +16,16 @@ The data used for this assignment are available in this github.  To use this dat
 
 2. Unzip the file and read it into a dataframe:
 
-```{r}
+
+```r
 unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
 
 3. Preprocess the data by changing date from character to Date format.
 
-```{r}
+
+```r
 activity$date <- as.Date(activity$date)
 ```
 
@@ -38,7 +36,8 @@ For this question, it is necessary to calculate total steps per day, create a hi
 ### Calculate total steps taken per day
 Use the aggregate function to calculate total steps by day.
 
-```{r steps_per_day}
+
+```r
 totalsteps <- aggregate(steps ~ date, data = activity, sum)
 ```
 
@@ -46,17 +45,31 @@ totalsteps <- aggregate(steps ~ date, data = activity, sum)
 
 Using the base plotting system, the hist function will generate a histogram of the total number of steps taken each day.
 
-```{r histogram}
+
+```r
 hist(totalsteps$steps, main = "Total Steps Per Day", col = "lightcyan",
      xlab = "Number of Steps")
 ```
+
+![](PA1_template_files/figure-html/histogram-1.png)<!-- -->
 
 ### Calculate the mean and median of total number of steps per day
 
 The summary function will list mean and median for the totalsteps dataframe.
 
-```{r}
+
+```r
 summary(totalsteps)
+```
+
+```
+##       date                steps      
+##  Min.   :2012-10-02   Min.   :   41  
+##  1st Qu.:2012-10-16   1st Qu.: 8841  
+##  Median :2012-10-29   Median :10765  
+##  Mean   :2012-10-30   Mean   :10766  
+##  3rd Qu.:2012-11-16   3rd Qu.:13294  
+##  Max.   :2012-11-29   Max.   :21194
 ```
 
 To answer the question, here are the required numbers:
@@ -69,7 +82,8 @@ To answer the question, here are the required numbers:
 
 First, determine the average daily steps using the aggregate function.
 
-```{r average_daily}
+
+```r
 # Use aggregate to determine average daily steps
 meansteps <- aggregate(x=list(meansteps=activity$steps),
                    by=list(activity$interval), FUN=mean, na.rm=TRUE)
@@ -81,13 +95,15 @@ colnames(meansteps) <- c("interval", "meansteps")
 ### Create a time series plot
 Use ggplot2 to create a time series plot.  Note: if you did not run the library function above, do so now:
 
-```{r} 
+
+```r
 library(ggplot2)
 ```
 
 Next, create the plot:
 
-```{r average_daily_plot}
+
+```r
 g1 <- ggplot(meansteps, aes(interval, meansteps)) + 
         geom_line(color = "dodgerblue1") +
         xlab("5-minute Interval") +
@@ -95,15 +111,22 @@ g1 <- ggplot(meansteps, aes(interval, meansteps)) +
         ggtitle("Average Daily Activity") +
         theme_bw()
 print(g1)
-
 ```
+
+![](PA1_template_files/figure-html/average_daily_plot-1.png)<!-- -->
 
 ### Which 5-minute interval contains the maximum steps?
 
 Use the which.max function to determine which interval has the maximum steps.
 
-```{r}
+
+```r
 meansteps[which.max(meansteps$mean),]
+```
+
+```
+##     interval meansteps
+## 104      835  206.1698
 ```
 
 The interval with the maximum steps (206) is:  *835*
@@ -114,10 +137,15 @@ First determine how many missing values are present in the data.
 
 ### Calculate and report # of missing values
 
-```{r}
+
+```r
 # Determine the number of rows with NA values
 not_ok <- activity[!complete.cases(activity),]
 dim(not_ok)[1]
+```
+
+```
+## [1] 2304
 ```
 
 There are *2304 missing values* in the dataset.
@@ -129,7 +157,8 @@ Next, determine a strategy for dealing with missing values.  Since the mean step
 
 Create a new dataframe (called *new_activity*) and then loop through the "steps" vector.  If the value is NA, data from the mean steps for 5-minute interval (*meansteps*) will be used in place of NA.  
 
-```{r newdataset}
+
+```r
 # create a new dataframe
 new_activity <- activity
 
@@ -146,7 +175,8 @@ for (i in 1:length(new_activity$steps)){
 
 In order to compare the two datasets, the following plot has two histograms.  The histogram on the left uses the original data and the histogram on the right uses the manipulated data (with missing values imputed).
 
-```{r twohistograms}
+
+```r
 # calculate total steps by day of the imputed data
 totalsteps2 <- aggregate(steps ~ date, data = new_activity, sum)
 
@@ -160,10 +190,23 @@ hist(totalsteps2$steps, main = "Total Steps Per Day",
      xlab = "Number of Steps (no missing data)")
 ```
 
+![](PA1_template_files/figure-html/twohistograms-1.png)<!-- -->
+
 Use summary to get mean and median numbers for the imputed dataset:
 
-```{r}
+
+```r
 summary(totalsteps2)
+```
+
+```
+##       date                steps      
+##  Min.   :2012-10-01   Min.   :   41  
+##  1st Qu.:2012-10-16   1st Qu.: 9819  
+##  Median :2012-10-31   Median :10766  
+##  Mean   :2012-10-31   Mean   :10766  
+##  3rd Qu.:2012-11-15   3rd Qu.:12811  
+##  Max.   :2012-11-30   Max.   :21194
 ```
 
 Imputed data:
@@ -185,8 +228,8 @@ During the preprocess stage (above), the date was already changed to the Date fo
 2. Create a column (called "daytype") to store the weekend/weekday values.  Set this to the value of "weekday".
 3.  Search for "Saturday" and "Sunday" in the dataframe and set their value to "weekend".  
 
-```{r weekdays}
 
+```r
 # Add a day of the week column to the dataframe
 new_activity$dayofweek <- weekdays(new_activity$date, abbreviate = FALSE)
 
@@ -207,14 +250,16 @@ new_activity$daytype <- as.factor(new_activity$daytype)
 
 Next, calculate the average steps for weekends and weekdays
 
-```{r}
+
+```r
 # Calculate mean steps for weekdays and weekends
 step_mean <- aggregate(steps ~ interval+daytype, new_activity, mean)
 ```
 
 Use ggplot2 to create a panel plot of average steps taken by 5-minute interval, comparing weekdays vs weekends.
 
-```{r panelplot}
+
+```r
 # Create a panel plot using weekday and weekend as facets
 g <- ggplot(step_mean, aes(interval, steps)) + 
         geom_line(color = "dodgerblue1") + 
@@ -227,10 +272,13 @@ g <- ggplot(step_mean, aes(interval, steps)) +
 print(g)
 ```
 
+![](PA1_template_files/figure-html/panelplot-1.png)<!-- -->
+
 ## Cleaning up
 
 Now that everything is done.  Be sure to clean-up your R workspace:
 
-```{r}
+
+```r
 rm(list = ls())
 ```
