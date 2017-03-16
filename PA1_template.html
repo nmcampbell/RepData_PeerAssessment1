@@ -275,7 +275,12 @@ hist(totalsteps2$steps, main = &quot;Total Steps Per Day&quot;,
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
-<p>During the preprocess stage (above), the date was already changed to the Date format, so the weekdays() function can be used to determine weekdays based on the date. To see if there are differences in activity patterns between weekdays and weekends, first the weekdays/weekend values need to be added to the dataset. This process involved several steps: 1. Use the weekdays() function to add day of the week to the dataframe. 2. Create a column (called “daytype”) to store the weekend/weekday values. Set this to the value of “weekday”. 3. Search for “Saturday” and “Sunday” in the dataframe and set their value to “weekend”.</p>
+<p>During the preprocess stage (above), the date was already changed to the Date format, so the weekdays() function can be used to determine weekdays based on the date. To see if there are differences in activity patterns between weekdays and weekends, first the weekdays/weekend values need to be added to the dataset. This process involved several steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Use the weekdays() function to add day of the week to the dataframe.</p></li>
+<li><p>Create a column (called “daytype”) to store the weekend/weekday values. Set this to the value of “weekday”.</p></li>
+<li><p>Search for “Saturday” and “Sunday” in the dataframe and set their value to “weekend”.</p></li>
+</ol>
 <pre class="r"><code># Add a day of the week column to the dataframe
 new_activity$dayofweek &lt;- weekdays(new_activity$date, abbreviate = FALSE)
 
@@ -312,6 +317,7 @@ print(g)</code></pre>
 <h2>Cleaning up</h2>
 <p>Now that everything is done. Be sure to clean-up your R workspace:</p>
 <pre class="r"><code>rm(list = ls())</code></pre>
+<p>All done!</p>
 </div>
 
 
