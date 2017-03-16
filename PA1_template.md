@@ -18,6 +18,7 @@ The data used for this assignment are available in this github.  To use this dat
 
 
 ```r
+# Unzip & create dataframe in working directory
 unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
@@ -38,6 +39,7 @@ Use the aggregate function to calculate total steps by day.
 
 
 ```r
+# Calculate total steps
 totalsteps <- aggregate(steps ~ date, data = activity, sum)
 ```
 
@@ -47,6 +49,7 @@ Using the base plotting system, the hist function will generate a histogram of t
 
 
 ```r
+# Create histogram
 hist(totalsteps$steps, main = "Total Steps Per Day", col = "lightcyan",
      xlab = "Number of Steps")
 ```
@@ -97,6 +100,7 @@ Use ggplot2 to create a time series plot.  Note: if you did not run the library 
 
 
 ```r
+# Only run this chunk if you didn't earlier
 library(ggplot2)
 ```
 
@@ -224,8 +228,11 @@ Removing NA's seems to have had a neglible impact on the mean and median results
 ## Are there differences in activity patterns between weekdays and weekends?
 
 During the preprocess stage (above), the date was already changed to the Date format, so the weekdays() function can be used to determine weekdays based on the date.  To see if there are differences in activity patterns between weekdays and weekends, first the weekdays/weekend values need to be added to the dataset.  This process involved several steps:
+
 1. Use the weekdays() function to add day of the week to the dataframe.
+
 2. Create a column (called "daytype") to store the weekend/weekday values.  Set this to the value of "weekday".
+
 3.  Search for "Saturday" and "Sunday" in the dataframe and set their value to "weekend".  
 
 
@@ -282,3 +289,5 @@ Now that everything is done.  Be sure to clean-up your R workspace:
 ```r
 rm(list = ls())
 ```
+
+All done! 
