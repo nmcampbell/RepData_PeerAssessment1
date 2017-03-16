@@ -18,6 +18,7 @@ The data used for this assignment are available in this github.  To use this dat
 
 
 ```r
+# Unzip & create dataframe in working directory
 unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
@@ -38,6 +39,7 @@ Use the aggregate function to calculate total steps by day.
 
 
 ```r
+# Calculate total steps
 totalsteps <- aggregate(steps ~ date, data = activity, sum)
 ```
 
@@ -47,6 +49,7 @@ Using the base plotting system, the hist function will generate a histogram of t
 
 
 ```r
+# Create histogram
 hist(totalsteps$steps, main = "Total Steps Per Day", col = "lightcyan",
      xlab = "Number of Steps")
 ```
@@ -97,6 +100,7 @@ Use ggplot2 to create a time series plot.  Note: if you did not run the library 
 
 
 ```r
+# Only run this chunk if you didn't earlier
 library(ggplot2)
 ```
 

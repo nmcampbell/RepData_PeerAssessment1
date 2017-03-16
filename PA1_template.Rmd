@@ -8,7 +8,7 @@ output:
 This assignment answers questions using data from a personal activity monitoring device.  Code for analyzing data and generating plots is included.
 
 First load needed libraries:
-```{r}
+```{r loadlibraries}
 # Load ggplot2
 library(ggplot2)
 ```
@@ -20,14 +20,15 @@ The data used for this assignment are available in this github.  To use this dat
 
 2. Unzip the file and read it into a dataframe:
 
-```{r}
+```{r loaddata}
+# Unzip & create dataframe in working directory
 unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
 
 3. Preprocess the data by changing date from character to Date format.
 
-```{r}
+```{r preprocess}
 activity$date <- as.Date(activity$date)
 ```
 
@@ -39,6 +40,7 @@ For this question, it is necessary to calculate total steps per day, create a hi
 Use the aggregate function to calculate total steps by day.
 
 ```{r steps_per_day}
+# Calculate total steps
 totalsteps <- aggregate(steps ~ date, data = activity, sum)
 ```
 
@@ -47,6 +49,7 @@ totalsteps <- aggregate(steps ~ date, data = activity, sum)
 Using the base plotting system, the hist function will generate a histogram of the total number of steps taken each day.
 
 ```{r histogram}
+# Create histogram
 hist(totalsteps$steps, main = "Total Steps Per Day", col = "lightcyan",
      xlab = "Number of Steps")
 ```
@@ -55,7 +58,7 @@ hist(totalsteps$steps, main = "Total Steps Per Day", col = "lightcyan",
 
 The summary function will list mean and median for the totalsteps dataframe.
 
-```{r}
+```{r summary1}
 summary(totalsteps)
 ```
 
@@ -82,6 +85,7 @@ colnames(meansteps) <- c("interval", "meansteps")
 Use ggplot2 to create a time series plot.  Note: if you did not run the library function above, do so now:
 
 ```{r} 
+# Only run this chunk if you didn't earlier
 library(ggplot2)
 ```
 
@@ -102,7 +106,7 @@ print(g1)
 
 Use the which.max function to determine which interval has the maximum steps.
 
-```{r}
+```{r meansteps}
 meansteps[which.max(meansteps$mean),]
 ```
 
@@ -114,7 +118,7 @@ First determine how many missing values are present in the data.
 
 ### Calculate and report # of missing values
 
-```{r}
+```{r missingvalues}
 # Determine the number of rows with NA values
 not_ok <- activity[!complete.cases(activity),]
 dim(not_ok)[1]
